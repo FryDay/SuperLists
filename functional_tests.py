@@ -34,10 +34,7 @@ class NewVisitorTest(unittest.TestCase):
         #When user hit enter, page updates, and now the page lists.
         # "1: Buy milk" as an item in a to-do list.
         inputbox.send_keys(Keys.ENTER)
-
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('1: Buy milk', [row.text for row in rows])
+        self.check_for_row_in_list_table('1: Buy milk')
 
         #There is still a text box inviting user to add another item.
         #User enters "Drink milk".
@@ -46,10 +43,8 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
 
         #Page updates again, and now shows both item on list.
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('1: Buy milk', [row.text for row in rows])
-        self.assertIn('2: Drink milk', [row.text for row in rows])
+        self.check_for_row_in_list_table('1: Buy milk')
+        self.check_for_row_in_list_table('2: Drink milk')
 
         #User gets unique URL and there is explanation text for it.
         self.fail('Finish the tests!')
@@ -58,6 +53,11 @@ class NewVisitorTest(unittest.TestCase):
 
         #User closes browser.
         self.browser.quit()
+
+    def check_for_row_in_list_table(self, row_text):
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(row_text, [row.text for row in rows])
 
 if __name__ == '__main__':
     unittest.main(warnings='ignore')
